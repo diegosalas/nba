@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">NuevaBanca</string>
+
+    //Default Error
+    <string name="error_99">El evento enviado no existe.</string>
+    <string name="error_98">Ha habido un error durante el proceso.</string>
+
+    //Bometrics
+    <string name="fingerprint_title_ok">Acceso con huella</string>
+    <string name="fingerprint_title_ko">Reintentar</string>
+    <string name="fingerprint_description">Pulsa sobre el sensor de huella digital</string>
+    <string name="fingerprint_description_content_description">Texto descriptivo para el reconocimiento biométrico.</string>
+    <string name="fingerprint_image_content_description">La imagen para el reconocimiento biométrico.</string>
+    <string name="fingerprint_status_content_description">El estado del reconocimiento biométrico.</string>
+    <string name="fingerprint_status_success">El reconocimiento ha sido satisfactorio.</string>
+    <string name="fingerprint_status_failed">El reconocimiento ha sido insatisfactorio.</string>
+    <string name="fingerprint_status_error">No se ha reconocido la huella, vuelve a intentarlo.</string>
+    <string name="fingerprint_cancel_button">Cancelar</string>
+
+    //Errors UTILS
+    <string name="error_201">El dispositivo no tiene el hardware para realizar la vibración.</string>
+    <string name="error_202">Pasa por el catch y salta la excepción al intentar hacer vibrar el dispositivo.</string>
+    <string name="error_203">Ha habido un error al comprobar si el dispositivo tiene estado NO MOLESTAR.</string>
+    <string name="error_204">Ha habido un error al obtener el estado de la conexión del dispositivo.</string>
+    <string name="error_205">Ha habido un error al obtener el estado del plano de la app.</string>
+    <string name="error_211">Ha habido un error al copiar el texto en el portapapeles.</string>
+    <string name="error_212">Ha habido un error al compartir un texto a una app externa</string>
+    <string name="error_221">Ha habido un error al obtener el Sistema Operativo.</string>
+    <string name="error_231">Ha habido un error al generar el KeyPair.</string>
+    <string name="error_241">No se ha generado la clave privada para poder cifrar el texto.</string>
+    <string name="error_242">Ha habido un error al cifrar el texto.</string>
+    <string name="error_243">No se ha generado la clave privada para poder firmar el texto.</string>
+    <string name="error_244">Ha habido un error al firmar el texto.</string>
+    <string name="error_251">Ha habido un error al obtener el UUID del dispositivo.</string>
+    <string name="error_261">Ha habido un error en la descarga del pdf.</string>
+    <string name="error_262">El usuario no ha aceptado los permisos.</string>
+    <string name="error_271">Ha habido un error al obtener el modelo del dispositivo</string>
+    <string name="error_281">Ha habido un error al comprobar si el dispositivo tiene notch</string>
+    <string name="error_291">Ha habido un error durante el proceso.</string>
+    <string name="error_292">La función a la que ha llamado no existe.</string>
+    <string name="error_491">Ha habido un error al intentar comprobar si está rooteado el dispositivo.</string>
+
+    //Errors APPOPENER
+    <string name="error_101">El launchIntent es null y no se puede abrir la aplicación.</string>
+    <string name="error_102">Pasa por el catch y salta la excepción al intentar abrir la aplicación.</string>
+    <string name="error_111">No tiene la aplicación instalada en el dispositivo.</string>
+    <string name="error_121">Error al abrir el market.</string>
+    <string name="error_191">Ha habido un error durante el proceso.</string>
+    <string name="error_192">La función a la que ha llamado no existe</string>
+
+    //Errors BIOMETRICs
+    <string name="error_301">La versión del dispositivo es inferior a la versión que permite el reconocimiento biométrico.</string>
+    <string name="error_302">El dispositivo no tiene el hardware necesario para el reconocimiento biométrico.</string>
+    <string name="error_303">El usuario no tiene ninguna huella enrolada en el dispositivo.</string>
+    <string name="error_304">Ha habido un error en el proceso de comprobar la disponibilidad.</string>
+    <string name="error_310">No se ha podido usar el reconocimiento biométrico en este dispositivo.</string>
+    <string name="error_311">Ha habido un problema y no se puede continuar con el reconocimiento biométrico.</string>
+    <string name="error_312">Ha habido un problema y no se puede continuar con el reconocimiento biométrico.</string>
+    <string name="error_313">La huella no se ha reconocido en el dispositivo.</string>
+    <string name="error_314">El usuario ha cancelado el reconocimiento biométrico.</string>
+    <string name="error_315">Ha habido un problema al intentar cancelar la identificación biométrica.</string>
+    <string name="error_320">Ha habido un error al actualizar la BBDD de android.</string>
+    <string name="error_321">Ha habido un error al hacer un insert en la BBDD de android.</string>
+    <string name="error_322">Ha habido un error al obtener los datos de la BBDD de android.</string>
+    <string name="error_391">Ha habido un error durante el proceso.</string>
+    <string name="error_392">La función a la que ha llamado no existe.</string>
+    <string name="error_393">Ha habido un error al generar el cipher.</string>
+    <string name="error_394">Ha habido un error al obtener el key.</string>
+    <string name="error_395">Ha habido un error al generar el key</string>
+
+    //Errors PUSH
+    <string name="error_501">Ha habido un error al settear el flag de push.</string>
+    <string name="error_511">Ha habido un error al comprobar el flag de push.</string>
+    <string name="error_521">Ha habido un error al obtener el token de push guardado.</string>
+    <string name="error_531">Ha habido un error al generar el ID de instancia para las notificaciones push.</string>
+
+    <string name="error_591">Ha habido un error durante el proceso.</string>
+    <string name="error_592">Ha habido un error durante el proceso.</string>
+
+</resources>

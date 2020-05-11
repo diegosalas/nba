@@ -1,0 +1,243 @@
+{
+  "project_info": {
+    "project_number": "177900345897",
+    "firebase_url": "https://ruralvia-ed6b4.firebaseio.com",
+    "project_id": "ruralvia-ed6b4",
+    "storage_bucket": "ruralvia-ed6b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177900345897:android:c29bb5c8f5f83ecb",
+        "android_client_info": {
+          "package_name": "com.rsi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177900345897-tlvgkcmfebudhs9qg0hrfb2idj12gdsr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rsi",
+            "certificate_hash": "c0ae95df682dd5b5ce6b0be2373c9de8ab49c74c"
+          }
+        },
+        {
+          "client_id": "177900345897-jicflp3hbjvq01n65l3jg4q19qv5gg5s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyQs7bqM_rszipylFygb7JxmoL0otxL-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177900345897-jicflp3hbjvq01n65l3jg4q19qv5gg5s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "177900345897-c8kb799pi693nsbrhhqmjlojurso4vsf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rsi.nba"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177900345897:android:b645a34c748b1d55",
+        "android_client_info": {
+          "package_name": "com.rsi.Colonya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177900345897-c6mmsm29jiucco0oi0uk3fjq6ikn7j7m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rsi.Colonya",
+            "certificate_hash": "c74ace145f947a59c67ba056fedc2a60cc953900"
+          }
+        },
+        {
+          "client_id": "177900345897-jicflp3hbjvq01n65l3jg4q19qv5gg5s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyQs7bqM_rszipylFygb7JxmoL0otxL-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177900345897-jicflp3hbjvq01n65l3jg4q19qv5gg5s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "177900345897-c8kb799pi693nsbrhhqmjlojurso4vsf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rsi.nba"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177900345897:android:6a0d1eadffd7005a",
+        "android_client_info": {
+          "package_name": "com.rsi.nba"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177900345897-jicflp3hbjvq01n65l3jg4q19qv5gg5s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyQs7bqM_rszipylFygb7JxmoL0otxL-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177900345897-jicflp3hbjvq01n65l3jg4q19qv5gg5s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "177900345897-c8kb799pi693nsbrhhqmjlojurso4vsf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rsi.nba"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177900345897:android:1ce810e39c506c32",
+        "android_client_info": {
+          "package_name": "com.rsi.pichincha"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177900345897-jicflp3hbjvq01n65l3jg4q19qv5gg5s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyQs7bqM_rszipylFygb7JxmoL0otxL-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177900345897-jicflp3hbjvq01n65l3jg4q19qv5gg5s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "177900345897-c8kb799pi693nsbrhhqmjlojurso4vsf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rsi.nba"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177900345897:android:71043608d713489f",
+        "android_client_info": {
+          "package_name": "es.bankoa.bankoaapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177900345897-jicflp3hbjvq01n65l3jg4q19qv5gg5s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyQs7bqM_rszipylFygb7JxmoL0otxL-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177900345897-jicflp3hbjvq01n65l3jg4q19qv5gg5s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "177900345897-c8kb799pi693nsbrhhqmjlojurso4vsf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rsi.nba"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177900345897:android:860893eb67c7221f",
+        "android_client_info": {
+          "package_name": "mArquia.mArquia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177900345897-jicflp3hbjvq01n65l3jg4q19qv5gg5s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyQs7bqM_rszipylFygb7JxmoL0otxL-E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177900345897-jicflp3hbjvq01n65l3jg4q19qv5gg5s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "177900345897-c8kb799pi693nsbrhhqmjlojurso4vsf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.rsi.nba"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

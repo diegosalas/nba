@@ -1,0 +1,6 @@
+module Pods_NuevaBanca_ios {
+  umbrella header "Pods-NuevaBanca-ios-umbrella.h"
+
+  export *
+  module * { export * }
+}

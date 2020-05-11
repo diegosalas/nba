@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/fingerprint_container"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/fingerprint_border"
+    >
+
+    <ImageView
+        android:id="@+id/imageFingerprint"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:contentDescription="@string/fingerprint_image_content_description"
+        android:padding="20dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/fingerprint_ok" />
+
+    <TextView
+        android:id="@+id/txtFingerprintTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/fingerprint_description_content_description"
+        android:padding="5dp"
+        android:text="@string/fingerprint_title_ok"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtFingerprintDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/fingerprint_description_content_description"
+        android:padding="5dp"
+        android:text="@string/fingerprint_description"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:height="1dp"
+        android:background="@drawable/fingerprint_line"
+        android:orientation="vertical" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/fingerprint_border"
+        android:text="@string/fingerprint_cancel_button"
+        android:textColor="#AAA" />
+
+
+</LinearLayout>

@@ -1,0 +1,579 @@
+
+<html>
+    <head>
+        <title>Prueba WebView</title>
+    </head>
+    <body>
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 100%;
+                align-items: center;
+                background-color: #3b5998;
+            }
+
+            h2 {
+                border: 1px solid black;
+                width: 90%;
+                padding: 2vw;
+                background: lightgrey;
+                text-align: center;
+            }
+
+            .plugin-class {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                align-items: center;
+            }
+
+            button {
+                width: 70%;
+                padding: 4vw;
+                background-color: #FFFFFF;
+                font-size: 4vw;
+            }
+
+            button + button {
+                margin-top: 2vw;
+            }
+
+            .plugin-buttons {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+        </style>
+        <script>
+            // FUNCIONES DEL PLUGIN UTILS
+            // Función para el nbe-startVibration
+            let startVibration = function() {
+                console.log('En el startVibration');
+                let obj = {
+                    "event": "nbe-startVibration",
+                    "extra": {
+                        "pattern": "0, 400, 1000, 600, 1000, 800, 1000, 1000"
+                    }
+                };
+                sendEvent(obj);
+            }
+            
+            // Función para el nbe-copyClipboard
+            let copyClipboard = function() {
+                console.log('En el copyClipboard');
+                let obj = {
+                    "event": "nbe-copyClipboard",
+                    "extra": {
+                        "textToCopy": "ES14 3456 7129 0997 1425"
+                    }
+                }
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-operativeSystem
+            let operativeSystem = function() {
+                console.log('En el operativeSystem');
+                let obj = {
+                    "event": "nbe-operativeSystem"
+                }
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-generatePublicKey
+            let generatePublicKey = function() {
+                console.log('En el generatePublicKey');
+                let obj = {
+                    "event": "nbe-generatePublicKey"
+                }
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-encryptToken
+            let encryptToken = function() {
+                console.log('En el encryptToken');
+                let obj = {
+                    "event": "nbe-encryptToken"
+                }
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-signToken
+            let signToken = function() {
+                console.log('En el signToken');
+                let obj = {
+                    "event": "nbe-signToken",
+                    "extra": {
+                        "token": "Texto para firmar"
+                    }
+                }
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-getDeviceUuid
+            let getDeviceUuid = function() {
+                console.log('En el getDeviceUuid');
+                let obj = {
+                    "event": "nbe-getDeviceUuid"
+                }
+                sendEvent(obj);
+            }
+
+
+            // Función para el nbe-getGAppVersiopn
+            let getAppVersion  = function() {
+                console.log('En el getAppVersion');
+                let obj = {
+                    "event": "nbe-getAppVersion"
+                }
+                sendEvent(obj);
+            }
+
+    		// Función para el nbe-getGAppVersiopn
+            let clearCache  = function() {
+                console.log('En el getAppVersion');
+                let obj = {
+                    "event": "nbe-clearCache"
+                }
+                sendEvent(obj);
+            }
+
+
+               
+            let listenForeground  = function() {
+                console.log('En el listenForeground');
+                let obj = {
+                    "event": "nbe-listenForeground"
+                }
+                sendEvent(obj);
+            }
+
+              let OnChangeStage  = function() {
+                console.log('En el native listenForeground');
+                let obj = {
+                    "event": "native-listenForeground"
+                }
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-downloadPdf
+            let downloadPdf = function() {
+                console.log('En el downloadPdf');
+                let obj = {
+                    "event": "nbe-downloadPdf",
+                    "extra": {
+                        "url": "https://wwwtest.ruralvia.com/pdf/RURALVIA/SEPA/INFO_TRF_INMEDIATAS_es_ES.pdf"
+                    }
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-getDeviceModel
+            let getDeviceModel = function() {
+                console.log('En el getDeviceModel');
+                let obj = {
+                    "event": "nbe-getDeviceModel"
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-hasNotch
+            let hasNotch = function() {
+                console.log('En el hasNotch');
+                let obj = {
+                    "event": "nbe-hasNotch"
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-networkStateListener
+            let networkStateListener = function() {
+                console.log('En el networkStateListener');
+                let obj = {
+                    "event": "nbe-networkStateListener"
+                };
+                sendEvent(obj);
+            }
+
+                 // Función para el nbe-pickContact
+            let pickContact = function() {
+                console.log('En PickContact');
+                let obj = {
+                    "event": "nbe-pickContact"
+                };
+                sendEvent(obj);
+            }
+
+
+
+
+             // Función para el nbe-getDarkMode
+            let getDarkMode = function() {
+                console.log('En getDarkMode');
+                let obj = {
+                    "event": "nbe-getDarkMode"
+                };
+                sendEvent(obj);
+            }
+
+
+             // Función para el nbe-openSocalMedia
+            let openSocalMedia = function() {
+                console.log('En nbe-openSocalMedia');
+                let obj = {
+                    "event": "nbe-openSocalMedia"
+                };
+                sendEvent(obj);
+            }
+
+
+             // Función para el nbe-lowCoverage
+            let lowCoverage = function() {
+                console.log('En lowCoverage');
+                let obj = {
+                    "event": "nbe-lowCoverage"
+                };
+                sendEvent(obj);
+            }
+
+             // Función para el nbe-lowBatery
+            let lowBatery = function() {
+                console.log('En nbe-lowBaterye');
+                let obj = {
+                    "event": "nbe-lowBatery"
+                };
+                sendEvent(obj);
+            }
+
+
+              // Función para el nbe-getColorStatusBar
+            let getColorStatusBar = function() {
+                console.log('En nbe-getColorStatusBar');
+                let obj = {
+                    "event": "nbe-getColorStatusBar"
+                };
+                sendEvent(obj);
+            }
+
+
+
+            // Función para el nbe-isDeviceRooted
+            let isDeviceRooted = function() {
+                console.log('En el isDeviceRooted');
+                let obj = {
+                    "event": "nbe-isDeviceRooted"
+                };
+                sendEvent(obj);
+            }
+
+            // FUNCIONES DEL PLUGIN APPOPENER
+            // Función para el nbe-openApp
+            let openApp = function() {
+                console.log('En el openApp');
+                let obj = {
+                    "event": "nbe-openApp",
+                    "extra": {
+                        "nombreAndroid": "com.cajasiete.android.cajasietereport",
+                        "nombreIos": "iOSReport://",
+                        "idIos": "1236047877"
+                    }
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-openProfileApp
+            let openProfileApp = function() {
+                console.log('En el openApp');
+                let obj = {
+                    "event": "nbe-openProfileApp",
+                    "extra": {
+                        "nombreAndroid": "com.cajasiete.android.cajasietereport",
+                        "nombreIos": "iOSReport://",
+                        "idIos": "1236047877",
+                        "userProfile": "ruralvia"
+                    }
+                };
+                sendEvent(obj);
+            }
+
+              // Función para el nbe-openProfileApp
+            let sharePdf = function() {
+                console.log('En el share pdf');
+                let obj = {
+                    "event": "nbe-share",
+                    "extra": {
+                        "text": "https://www.ruralvia.com/cms/estatico/rvia/bancocooperativo/ruralvia/es/particulares/informacion_institucional/el_banco/docs_el_banco/infor_anual_2019/06-Negocios-y-Actividades.pdf"
+                     }
+                };
+                sendEvent(obj);
+            }
+
+            let shareText = function() {
+                console.log('En el share text');
+                let obj = {
+                    "event": "nbe-share",
+                    "extra": {
+                        "text": "Shared Text"
+                     }
+                };
+                sendEvent(obj);
+            }
+
+
+            let shareImage = function() {
+                console.log('En el share text');
+                let obj = {
+                    "event": "nbe-share",
+                    "extra": {
+                        "text": "https://www.equiposytalento.com/contenido/noticias/logos11.jpg"
+                     }
+                };
+                sendEvent(obj);
+            }
+
+            // FUNCIONES DEL PLUGIN Biometrics
+            // Función para el nbe-checkBiometricAvailability
+            let checkBiometricAvailability = function() {
+                console.log('En el checkBiometricAvailability');
+                let obj = {
+                    "event": "nbe-checkBiometricAvailability"
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-initBiometricIdentification
+            let initBiometricIdentification = function() {
+                console.log('En el initBiometricIdentification');
+                let obj = {
+                    "event": "nbe-initBiometricIdentification",
+                    "extra": {
+                        "title": "Acceso con huella",
+                        "desc": "Mantenga presionado el sensor de huella"
+                    }
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-stopBiometricIdentification
+            let stopBiometricIdentification = function() {
+                console.log('En el stopBiometricIdentification');
+                let obj = {
+                    "event": "nbe-stopBiometricIdentification"
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-updateBiometricFlag
+            let updateBiometricFlag = function() {
+                console.log('En el updateBiometricFlag');
+                let obj = {
+                    "event": "nbe-updateBiometricFlag",
+                    "extra": {
+                        "biometricValue": "true"
+                    }
+                };
+                sendEvent(obj);
+            }
+
+
+            // Función para el nbe-getBiometricFlag
+            let getBiometricFlag = function() {
+                console.log('En el getBiometricFlag');
+                let obj = {
+                    "event": "nbe-getBiometricFlag"
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-isPushNotificationEnabled
+            let isPushNotificationEnabled = function() {
+                console.log('En el nbe-isPushNotificationEnabled');
+                let obj = {
+                    "event": "nbe-isPushNotificationEnabled"
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-getBiometricFlag
+            let getPushFlag = function() {
+                console.log('En el getPushFlag');
+                let obj = {
+                    "event": "nbe-getPushFlag",
+                    "extra": {
+                        "flag": "true"
+                    }
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-updatePushFlag
+            let updatePushFlag = function() {
+                console.log('En el updatePushFlag');
+                let obj = {
+                    "event": "nbe-updatePushFlag",
+                    "extra": {
+                        "flag": "true"
+                    }
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-removePushFlag
+            let removePushFlag = function() {
+                console.log('En el removePushFlag');
+                let obj = {
+                    "event": "nbe-removePushFlag"
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-isPushFlagSet
+            let isPushFlagSet = function() {
+                console.log('En el isPushFlagSet');
+                let obj = {
+                    "event": "nbe-isPushFlagSet"
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-getIdPush
+            let getIdPush = function() {
+                console.log('En el getIdPush');
+                let obj = {
+                    "event": "nbe-getIdPush"
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-generateIdPush
+            let generateIdPush = function() {
+                console.log('En el generateIdPush');
+                let obj = {
+                    "event": "nbe-generateIdPush"
+                };
+                sendEvent(obj);
+            }
+
+            // Función para el nbe-initPushListener
+            let initPushListener = function() {
+                console.log('En el initPushListener');
+                let obj = {
+                    "event": "nbe-initPushListener"
+                };
+                sendEvent(obj);
+            }
+
+            // FUNCIONES GENERALES
+            //Funcion para ocultar/mostrar los botones
+            let clickManager = function(id) {
+                console.log('En el clickManager')
+                let btn = document.getElementById(id)
+                let display = btn.style.display
+                if(display === "none") {
+                    btn.style.display = "flex"
+                } else if(display === "flex") {
+                    btn.style.display = "none"
+                }
+            }
+
+            // Función que envía el evento
+            let sendEvent = function(obj) {
+                if(navigator.userAgent.includes('iPhone')) {
+                    console.log('Va por iOS: ' + JSON.stringify(obj));
+                    window.webkit.messageHandlers.nbAdapter.postMessage(obj);
+                } else {
+                    console.log('Va por Android: ' + JSON.stringify(obj));
+                    nbAdapter.webReceiver(JSON.stringify(obj));
+                }
+            }
+
+            // // Función que recibe el evento de la app nativa
+            // let webviewListener = function(data) {
+            //     console.log("En el webviewListener");
+            //     console.log(data);
+            //     if(navigator.userAgent.includes('iPhone')) {
+            //         window.webkit.messageHandlers.nbAdapter.postMessage('mensaje de vuelta');
+            //     } else {
+            //         nbAdapter.webReceiver("Mensaje de vuelta");
+            //     }
+            // }
+        
+            let initialize = function() {
+                console.log('En el initialize')
+                document.addEventListener("DOMContentLoaded", function(event) {
+                    console.log('En el onload')
+                    document.getElementById('buttonsUtils').style.display = 'none'
+                    document.getElementById('buttonsAppOpener').style.display = 'none'
+                    document.getElementById('buttonsBiometrics').style.display = 'none'
+                    document.getElementById('buttonsPush').style.display = 'none'
+                });
+            }
+
+            initialize()
+        </script>
+       <div class="plugin-class" onclick="clickManager('buttonsUtils')">
+            <h2>Plugin Utils</h2>
+            <div id="buttonsUtils" class="plugin-buttons">
+            	<button onclick="getDarkModet()">nbe-getDarkMode</button>
+            	<button onclick="lowBatery()">nbe-lowBatery</button>
+            	<button onclick="getColorStatusBar()">nbe-getColorStatusBar</button>
+                <button onclick="startVibration()">nbe-startVibration</button>
+                <button onclick="copyClipboard()">nbe-copyClipboard</button>
+                <button onclick="operativeSystem()">nbe-operativeSystem</button>
+                <button onclick="generatePublicKey()">nbe-generatePublicKey</button>
+                <button onclick="encryptToken()">nbe-encryptToken</button>
+                <button onclick="signToken()">nbe-signToken</button>
+                <button onclick="getDeviceUuid()">nbe-getDeviceUuid</button>
+                <button onclick="getAppVersion()">nbe-getAppVersion</button>
+				<button onclick="clearCache()">nbe-clearCache</button>
+				<button onclick="pickContact()">nbe-pickContact</button>
+                <button onclick="listenForeground()">nbe-listenForeground</button>
+                <button onclick="OnChangeStage()">native-listenForeground</button>
+                <button onclick="downloadPdf()">nbe-downloadPdf</button>
+                <button onclick="getDeviceModel()">nbe-getDeviceModel</button>
+                <button onclick="hasNotch()">nbe-hasNotch</button>
+                <button onclick="networkStateListener()">nbe-networkStateListener</button>
+                <button onclick="isDeviceRooted()">nbe-isDeviceRooted</button>        
+            </div>
+        </div>
+        <div class="plugin-class" onclick="clickManager('buttonsAppOpener')">
+            <h2>Plugin AppOpener</h2>
+            <div id="buttonsAppOpener" class="plugin-buttons">
+                <button onclick="openApp()">nbe-openApp</button>
+                <button onclick="openProfileApp()">nbe-openProfileApp</button>
+                <button onclick="shareText()">nbe-share text</button>
+                <button onclick="shareImage()">nbe-share Image</button>
+                <button onclick="sharePdf()">nbe-share Pdf</button>
+                <button onclick="lowCoverage()">nbe-lowCoveragea</button>
+            </div>
+        </div>
+        <div class="plugin-class" onclick="clickManager('buttonsBiometrics')">
+            <h2>Plugin Biometrics</h2>
+            <div id="buttonsBiometrics" class="plugin-buttons">
+                <button onclick="checkBiometricAvailability()">nbe-checkBiometricAvailability</button>
+                <button onclick="initBiometricIdentification()">nbe-initBiometricIdentification</button>
+                <button onclick="stopBiometricIdentification()">nbe-stopBiometricIdentification</button>
+                <button onclick="updateBiometricFlag()">nbe-updateBiometricFlag</button>
+                <button onclick="getBiometricFlag()">nbe-getBiometricFlag</button>
+            </div>
+        </div>
+
+        <div class="plugin-class" onclick="clickManager('buttonsPush')">
+            <h2>Plugin Push</h2>
+            <div id="buttonsPush" class="plugin-buttons">
+                <button onclick="isPushNotificationEnabled()">nbe-isPushNotificationEnabled</button>
+                <button onclick="updatePushFlag()">nbe-updatePushFlag</button>
+                <button onclick="getPushFlag()">nbe-getPushFlag</button>
+                <button onclick="removePushFlag()">nbe-removePushFlag</button>
+                <button onclick="isPushFlagSet()">nbe-isPushFlagSet</button>
+                <button onclick="getIdPush()">nbe-getIdPush</button>
+                <button onclick="generateIdPush()">nbe-generateIdPush</button>
+                <button onclick="initPushListener()">nbe-initPushListener</button>
+                <button onclick="openSocalMedia()">nbe-openSocalMedia</button>
+            </div>
+        </div>
+  
+</body>
+</html>

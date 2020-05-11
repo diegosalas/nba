@@ -1,0 +1,2122 @@
+
+ {{En construcción}}
+
+Proyecto que incluye dos carcasas nativas, Android e iOS, para el manejo y comunicación entre el sistema operativo del dispositivo y la web. En este artículo se enumeran todos los métodos, peticiones y códigos de error a los que tendrá acceso el proyecto de Nueva Banca Electrónica para los procesos necesarios que impliquen una comunicación o actuación directa con la parte nativa de la aplicación o el sistema operativo del dispositivo.
+
+&nbsp;
+
+= Introducción =
+
+== Android ==
+
+Dentro de la carcasa Android debemos tener, en nuestro layout, el componente “WebView”, donde se cargará la url a llamar y con la cual se interactuará. Para ello debemos implementar el método “addJavascriptInterface” y al cual le pasaremos un objeto y un nombre, en este caso el objeto es una clase que implementa el método para manejar las llamadas que vienen del WebView. Además, incorporamos una clase controller para redirigir las llamadas y respuestas según corresponda.
+
+=== Activity - MainActivity ===
+
+&nbsp;
+<syntaxhighlight lang="Java">public static final String KEY_ADAPTER_NAME = "nbAdapter";
+// URL de NBE
+private String url = "https://cdntest.ruralvia.com/CA-FRONT/NBE/app/feature-CAFE-0-prueba-webview-nativo/";
+// Settings del webview
+mWebView.setWebViewClient(new WebViewClient());
+WebSettings ajustesWebView = mWebView.getSettings();
+ajustesWebView.setJavaScriptEnabled(true);
+ajustesWebView.setDomStorageEnabled(true);
+
+mWebView.loadUrl(url);
+
+// Publica un objeto "nbAdapter" para poder ser invocado desde la web
+mWebView.addJavascriptInterface(new WebAppInterface(getApplicationContext()), KEY_ADAPTER_NAME);
+</syntaxhighlight>
+
+=== Clase - WebAppInterface ===
+
+&nbsp;
+<syntaxhighlight lang="Java">
+// Maneja las llamadas que vienen del WebView y las reenvía al controller
+@JavascriptInterface
+public void webReceiver(String data) {
+    webViewController.createEvent(data);
+}
+</syntaxhighlight>
+
+=== Clase - WebViewController ===
+
+&nbsp;
+<syntaxhighlight lang="Java">// recibe las llamadas y las transforma en el modelo Evento para poder ser interpretado.
+public void createEvent(String data){
+    try {
+        Event event = new Gson().fromJson(data, Event.class);
+        eventManager(event);
+    }catch (Exception e){
+        
+    }
+
+// Función que ejecuta una función en el WebView
+private static void sendCallback(final String data) {
+    try {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                String jsToCode = "webviewListener(" + data + ")";
+                mWebView.evaluateJavascript(jsToCode, new ValueCallback<String>() {
+                    @Override
+                    public void onReceiveValue(String value) {
+                        
+                    }
+                });
+            }
+        });
+    } catch(Exception e) {
+        Log.d(TAG, "En el catch del mandar evento: " + e);
+    }
+}
+</syntaxhighlight>
+
+== iOS ==
+
+Dentro de la carcasa iOS debemos un componente WebView que interactue con la Web desde un ViewController. El ViewController necesita tener un Handler WKScriptMessageHandler y UIWebViewDelegate los cuales recibén y emiten los eventos de la web.
+
+=== ViewController ===
+
+Función listener escuchar recibe el mensaje solicitado por la web.
+<syntaxhighlight lang="Swift">
+// Listener donde llegan los eventos lanzados por el WebView
+func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+...
+}
+</syntaxhighlight>
+
+Función que ejecuta una función de la web
+<syntaxhighlight lang="Swift">
+func sendMessageToWebView(evento: Any) {
+    let obj = JSONSerializer.toJson(evento)
+    print ("Return: " + obj)
+    let jsToCode = "webviewListener(" + obj + ")"
+    DispatchQueue.main.async {
+        self.webView.evaluateJavaScript(jsToCode) { (resp, err) in
+            print("receiveValue: ", resp ?? "null")
+        }
+    }
+}
+</syntaxhighlight>
+
+= Identificadores de las Aplicaciones =
+
+{| style="width: 100%; border: 1px solid #59b300"
+|- style="font-weight: bold; background-color:#59b300"
+| Aplicación
+| Nombre Android
+| Nombre iOS
+| Id Apple Store
+|- style="border: 1px solid #59b300"
+| style="font-weight: bold;" | Facebook
+| com.facebook.katana
+| fb://
+| 284882215
+|- style="border: 1px solid #59b300"
+| style="font-weight: bold;" | Twitter
+| com.twitter.android
+| twitter://
+| 333903271
+|- style="border: 1px solid #59b300"
+| style="font-weight: bold;" | ruralvía pay
+| com.rsi.ruralviawallet2
+| iOSRuralviaPay://
+| 1163741761
+|- style="border: 1px solid #59b300"
+| style="font-weight: bold;" | Report
+| com.cajasiete.android.cajasietereport
+| iOSReport://
+| 1236047877
+|}
+
+= Eventos incorporados =
+
+A continuación se documentan todos los eventos agrupados según al tipo de funciones al que pertenecen:
+
+== Funciones Tipo AppOpener ==
+
+Necesario para abrir una aplicación externa desde la nuestra. Nos encontraremos funciones cómo: openApp() y openProfileApp(), que nos ayudarán a que esto sea posible. Todos los códigos de error estarán a partir del número&nbsp;100 Los eventos disponibles son los siguientes:
+
+=== OPENAPP ===
+
+Evento que sirve para abrir una aplicación externa desde la nuestra propia. Incluye toda la lógica para comprobar si una aplicación está ya instalada en el dispositivo. Si está instalada, abriremos la aplicación, pero si por el contrario no está instalada, abriremos esa aplicación en el market para que puedan descargarla.
+
+==== Datos de Entrada ====
+
+Los datos necesarios para que la llamada sea correcta son:
+
+'''· nombreAndroid''': corresponde con el identificador de la aplicación para subir a "Google play". EJ/ com.cajasiete.android.cajasietereport
+
+'''· nombreIos''': corresponde con el identificador de la aplicación que aparece en su archivo .plist. EJ/ iOSReport://
+
+'''· idIos''': corresponde con el número que aparece en la url cuando abres una aplicación en el "App Store". EJ/ 1236047877
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-openApp",
+   extra: {
+     nombreAndroid: "com.cajasiete.android.cajasietereport",
+     nombreIos: "iOSReport://",
+     idIos: "1236047877"
+   }
+ }</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-openAppReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+
+  No hay respuesta 'OK', ya que al abrir una aplicación externa, perdemos el control de los callbacks.
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-openAppReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 101,
+       description: "El launchIntent es null y no se puede abrir la aplicación."
+     }
+   }
+ }</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 111: ''' No tiene la aplicación instalada en el dispositivo.
+
+ '''. 102: ''' Pasa por el catch y salta la excepción al intentar abrir la aplicación.
+
+'''iOS'''
+
+ '''. 105: ''' El S.O. tiene que ser mínimo v10.0
+
+&nbsp;
+
+=== OPENPROFILEAPP ===
+
+Evento que sirve para abrir un perfil en una aplicación externa desde la nuestra propia. Incluye toda la lógica para comprobar si la aplicación externa está instalada en el dispositivo. Si está instalada, abriremos la aplicación, sino, abriremos esa aplicación en el market para que puedan descargarla.
+
+==== Datos de Entrada ====
+
+Los datos necesarios para que la llamada sea correcta son:
+
+'''· nombreAndroid''': corresponde con el identificador de la aplicación para subir a "Google play". EJ/ com.cajasiete.android.cajasietereport
+
+'''· nombreIos''': corresponde con el identificador de la aplicación que aparece en su archivo .plist. EJ/ iOSReport://
+
+'''· idIos''': corresponde con el número que aparece en la url cuando abres una aplicación en el "App Store". EJ/ 1236047877
+
+'''· userProfile''': corresponde al nombre o identificador del usuario dentro de la aplicación externa. EJ/ ruralvía
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-openApp",
+   extra: {
+     nombreAndroid: "com.cajasiete.android.cajasietereport",
+     nombreIos: "iOSReport://",
+     idIos: "1236047877",
+     userProfile:"ruralvía"
+   }
+ }</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-openAppReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+
+  No hay respuesta 'OK', ya que al abrir una aplicación externa, perdemos el control de los callbacks.
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-openAppReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 101,
+       description: "Ha ido mal por algo"
+     }
+   }
+ }</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 101: ''' El launchIntent es null y no se puede abrir la aplicación.
+
+ '''. 102: ''' Pasa por el catch y salta la excepción al intentar abrir la aplicación.
+
+'''iOS'''
+
+ '''. 103: ''' Ha habido un error durante el proceso
+
+ '''. 104: ''' El S.O. tiene que ser mínimo v10.0
+
+ '''. 105: ''' No se puede abrir otra aplicación. (iOS)
+
+&nbsp;
+
+=== SHARE ===
+
+Evento compartir diferentes objetos desde la aplicación, como archivos pdf, imágenes y textos.
+
+==== Datos de Entrada ====
+
+Los datos necesarios para que la llamada sea correcta son:
+
+'''.text''': En este dato se encontrará el texto a compartir o bien la dirección url de la imagen o la dirección url del pdf. Ej:"[https://wwwtest.ruralvia.com/pdf/RURALVIA/SEPA/INFO_TRF_INMEDIATAS_es_ES.pdf https://wwwtest.ruralvia.com/pdf/RURALVIA/SEPA/INFO_TRF_INMEDIATAS_es_ES.pdf]"
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-share",
+   extra: {
+     text: "https://wwwtest.ruralvia.com/pdf/RURALVIA/SEPA/INFO_TRF_INMEDIATAS_es_ES.pdf"
+   }
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-shareReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-shareReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "OK"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event:  "nbe-shareReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 261,
+       description: "Ha habido un error en la descarga."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 261: ''' Ha habido un error en la descarga.
+
+ '''. 262: ''' El usuario no ha aceptado los permisos.
+
+&nbsp;
+
+=== Códigos de Error ===
+
+Todos los códigos de error estará a partir del número '''100''':
+
+'''Android'''
+
+ '''. 101: ''' El launchIntent es null y no se puede abrir la aplicación.
+
+ '''. 102: ''' Pasa por el catch y salta la excepción al intentar abrir la aplicación.
+
+ '''. 111: ''' No tiene la aplicación instalada en el dispositivo.
+
+ '''. 121: ''' Error al abrir el market.
+
+ '''. 191: ''' Ha habido un error durante el proceso.
+
+ '''. 192: ''' La función a la que ha llamado no existe
+
+'''iOS'''
+
+ '''. 103: ''' El S.O. tiene que ser mínimo v10.0.
+
+ '''. 104: ''' No está permitido abrir otra aplicación.
+
+ '''. 105: ''' H a habido un error durante el proceso.
+
+ '''. 111: ''' No tiene la aplicación instalada en el dispositivo.
+
+== Funciones Tipo Utils ==
+
+Añadiremos todas las funcionalidades relativas a configuración y datos del S.O. y demás funciones que puedan ser de utilidad. Todos los códigos de error estará a partir del número 200.
+
+=== STARTVIBRATION ===
+
+Evento para hacer vibrar el dispositivo pasándole como parámetro un patrón.
+
+==== Datos de Entrada ====
+
+Los datos necesarios para que la llamada sea correcta son:
+
+'''· pattern''': una serie de milisegundos que van alternando tiempo vibrando - tiempo de pausa. EJ/ "0, 400, 1000, 600, 1000, 800, 1000, 1000"
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-startVibration",
+   extra: {
+     pattern: "0, 400, 1000, 600, 1000, 800, 1000, 1000"
+   }
+ }</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-startVibrationReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-startVibrationReturn",
+   extra: {
+     codigoRetorno: 1
+   }
+ }</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-startVibrationReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 201,
+       description: "El dispositivo no tiene el hardware para realizar la vibración."
+     }
+   }
+ }</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 201: ''' El dispositivo no tiene el hardware para realizar la vibración.
+
+ '''. 202: ''' Pasa por el catch y salta la excepción al intentar hacer vibrar el dispositivo.
+
+=== COPYCLIPBOARD ===
+
+Evento que copia el texto que se quiera en el portapapeles para poder pegarlo donde sea.
+
+==== Datos de Entrada ====
+
+Los datos necesarios para que la llamada sea correcta son:
+
+'''· textToCopy''': el texto que queremos guardar para que pueda pegarse en otras aplicaciones. EJ/ "ES14 3456 7129 0997 1425"
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-copyClipboard",
+   extra: {
+     textToCopy: "ES14 3456 7129 0997 1425"
+   }
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-copyClipboardReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-copyClipboardReturn",
+   extra: {
+     codigoRetorno: 1
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-copyClipboardReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 211,
+       description: "Ha habido un error al copiar el texto en el portapapeles."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 211: ''' Ha habido un error al copiar el texto en el portapapeles.
+
+=== OPERATIVESYSTEM ===
+
+Evento para obtener el Sistema Operativo del dispositivo.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-operativeSystem"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-operativeSystemReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-operativeSystemReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "Android/iOS"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-operativeSystemReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 221,
+       description: "Ha habido un error al obtener el Sistema Operativo."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 221: ''' Ha habido un error al obtener el Sistema Operativo.
+
+'''iOS'''
+
+ '''. 271: ''' Ha habido un error al obtener el modelo del dispositivo
+
+=== GENERATEPUBLICKEY ===
+
+Evento para obtener la clave pública con la que descifrar el texto cifrado por la clave privada. Siempre tiene que llamarse antes de cifrar un texto.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-generatePublicKey"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-generatePublicKeyReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-generatePublicKeyReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "adbsuiabdnmxjuu4iubiybvaixahixiyvcuhshabcoi"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-generatePublicKeyReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 231,
+       description: "Ha habido un error al generar el KeyPair."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 231: ''' Ha habido un error al generar el KeyPair.
+
+'''iOS'''
+
+ '''. 232: ''' La versión del dispositivo es inferior a la versión 10.0 y no puede ejecutar la función.
+
+=== SIGNTOKEN ===
+
+Evento para firmar un texto con la clave privada generada al obtener la clave pública del evento NBE-GENERATEPUBLICKEY.
+
+==== Datos de Entrada ====
+
+Los datos necesarios para que la llamada sea correcta son:
+
+'''· token''': el texto que firmar con la clave privada. EJ/ "Texto de prueba a firmar"
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript"> {
+   event: "nbe-signToken",
+   extra: {
+     token: " Texto a firmar"
+   }
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-signTokenReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-signTokenReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "adbsuiabdnmxjuu4iubiybvaixahixiyvcuhshabcoi"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-signTokenReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 243,
+       description: "No se ha generado la clave privada para poder firmar el texto"
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 243: ''' No se ha generado la clave privada para poder firmar el texto
+
+ '''. 244: ''' Ha habido un error al firmar el texto.
+
+'''iOS'''
+
+ '''. 237: ''' La versión del dispositivo es inferior a la versión 10.0 y no puede ejecutar la función.
+
+ '''. 238: ''' No hay ninguna clave privada para firmar el texto
+
+=== GETDEVICEUUID ===
+
+Evento para obtener un UUID para el dispositivo.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getDeviceUuid"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-getDeviceUuidReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getDeviceUuidReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "adbsuiabdnmxjuu4iubiybvaixahixiyvcuhshabcoi"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event:  "nbe-getDeviceUuidReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 251,
+       description: "Ha habido un error al obtener el UUID del dispositivo."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 251: ''' Ha habido un error al obtener el UUID del dispositivo.
+
+'''iOS'''
+
+ '''. 238: ''' Ha habido un error al obtener el UUID del dispositivo. 
+
+=== DOWNLOADPDF ===
+
+Evento para la descarga de PDF's. En Android, se descargará el PDF, y en iOS, se levantará un visor de PDF's con opciones de descarga y guardado del archivo.
+
+==== Datos de Entrada ====
+
+'''.url''': dirección url del pdf. Ej/ &nbsp;"[https://wwwtest.ruralvia.com/pdf/RURALVIA/SEPA/INFO_TRF_INMEDIATAS_es_ES.pdf https://wwwtest.ruralvia.com/pdf/RURALVIA/SEPA/INFO_TRF_INMEDIATAS_es_ES.pdf]"
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-downloadPdf",
+   extra:{
+     url: "https://wwwtest.ruralvia.com/pdf/RURALVIA/SEPA/INFO_TRF_INMEDIATAS_es_ES.pdf"
+   }
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-downloadPdfReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-downloadPdfReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "Ok"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event:  "nbe-downloadPdfReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 261,
+       description: "Ha habido un error en la descarga del pdf."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 261: ''' Ha habido un error en la descarga del pdf.
+
+=== GETDEVICEMODEL ===
+
+Evento para obtener el model del dispositivo.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getDeviceModel"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-getDeviceModelReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getDeviceModelReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "modelo de dispositivo"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event:  "nbe-getDeviceModelReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 271,
+       description: "Ha habido un error al obtener el modelo del dispositivo"
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 271: ''' Ha habido un error al obtener el modelo del dispositivo
+
+'''iOS'''
+
+ '''. 271: ''' Ha habido un error al obtener el modelo del dispositivo
+
+=== HASNOTCH ===
+
+Evento para obtener si el dispositivo tiene notch.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-hasNotch"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-hasNotchReturn''' y puede ser OK o KO
+
+'''Respuesta OK:''' Es true si el dispositivo tiene notch, false en caso contrario.
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-hasNotchReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "true/false"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event:  "nbe-hasNotchReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 281,
+       description: "Ha habido un error al comprobar si el dispositivo tiene notch"
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 281: ''' Ha habido un error al comprobar si el dispositivo tiene notch
+
+'''iOS'''
+
+ '''. 281: ''' Ha habido un error al comprobar si el dispositivo tiene notch
+
+=== NETWORKSTATELISTENER ===
+
+Evento para obtener el estado de la conexión. Cada vez que se produce un cambio, el dispositivo devuelve una llamada con el nuevo estado de conexión.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-networkStateListener"
+ }
+</syntaxhighlight>
+
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-networkStateListenerReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-networkStateListenerReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "Unavailable/None/2G/3G/4G/5G/Wifi"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event:  "nbe-networkStateListenerReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 204,
+       description: "Ha habido un error al obtener el estado de la conexión del dispositivo."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 204: ''' Ha habido un error al obtener el estado de la conexión del dispositivo.
+
+=== ISDEVICEROOTED ===
+
+Evento que sirve para saber si un dispositivo está rooteado (Android) o con Jailbreak (iOS).
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-isDeviceRooted"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-isDeviceRootedReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-isDeviceRootedReturn",
+   extra: {
+     codigoRetorno: 1
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-isDeviceRootedReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 491,
+       description: "Ha habido un error al intentar comprobar si está rooteado el dispositivo."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 491: ''' Ha habido un error al intentar comprobar si está rooteado el dispositivo.
+
+=== CLOSEAPP ===
+
+Evento para cerrar la aplicación.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada. Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+    event: "nbe-closeApp"
+ }</syntaxhighlight>
+
+==== Respuesta ====
+
+No hay respuesta
+
+==== Códigos de Error ====
+
+No hay códigos de error para esta función
+
+=== ONBACKBUTTONPRESSED ===
+
+Evento nativo para avisar al webView cuando se presiona el botón para atrás.
+
+==== Datos de Entrada ====
+
+No existen datos de entrada al ser un evento nativo.
+
+==== Respuesta ====
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "native-onBackButtonPressed",
+   extra: {
+     codigoRetorno: 1
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+No hay códigos de error para esta función
+
+=== GETAPPVERSION ===
+
+Evento para la identificación de la versión instalada en el dispositivo.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada. Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getAppVersion"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-getAppVersionReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getAppVersionReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "1.0.0"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event:  "nbe-getAppVersionReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 272,
+       description: "Ha habido un error al obtener la versión de la app"
+     }
+   }
+ }
+</syntaxhighlight>
+
+&nbsp;
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 272: ''' Ha habido un error al obtener la versión de la app.
+
+'''iOS'''
+
+ '''. 251: ''' Ha habido un error al obtener la versión de la app.
+
+=== CLEARCACHE ===
+
+Evento para la limpieza del caché en el dispositivo.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada. Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-clearCahe"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-clearCaheReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-clearCaheReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "Cache cleared!"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event:  "nbe-clearCaheReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 291,
+       description: "Ha habido un error durante el proceso."
+     }
+   }
+ }
+</syntaxhighlight>
+
+&nbsp;
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 291: ''' Ha habido un error durante el proceso.
+
+=== ONCHANGESTATE ===
+
+Evento nativo para avisar al webView cuando la aplicación se encuentra en primer plano o segundo plano.
+
+==== Datos de Entrada ====
+
+No existen datos de entrada al ser un evento nativo.
+
+==== Respuesta ====
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "native-listenForeground",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "foreground/background"
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+No hay códigos de error para esta función
+
+=== LISTENFOREGROUND ===
+
+Evento para identificar si la aplicación se encuentra en primer plano o segundo plano.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada. Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-listenForeground"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-listenForegroundReturn''':
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-listenForegroundReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "foreground/background"
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+No hay códigos de error para esta función
+
+=== PICKCONTACT ===
+
+Evento para buscar, seleccionar y obtener el nombre y teléfono de un contacto en el dispositivo.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada. Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-pickContact"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-pickContactReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-pickContactReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       name: "Nombre del Contacto",
+       phone: "653012746"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event:  "nbe-pickContactReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 263,
+       description: "El usuario no ha aceptado los permisos."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 263: ''' El usuario no ha aceptado los permisos.
+
+ '''. 264: ''' El usuario canceló el proceso.
+
+ '''. 265: ''' El contacto seleccionado no tiene número de teléfono.
+
+'''iOS'''
+
+ '''. 265: ''' El contacto seleccionado no tiene número de teléfono.
+
+=== STATUSBATTERY ===
+
+Evento nativo para informar cuando el dispositivo se le está agotando la batería o bien supero un porcentaje de batería.
+
+
+==== Datos de Entrada ====
+
+No existen datos de entrada al ser un evento nativo.
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''native-statusBatteryReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "native-statusBatteryReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "LOW/OK"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event:  "native-statusBatteryReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 291,
+       description: "Ha habido un error durante el proceso."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 291: ''' Ha habido un error durante el proceso.
+
+=== GETDARKMODE ===
+
+Evento para identificar si el dispositivo tiene activado el modo oscuro.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada. Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getDarkMode"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-getDarkModeReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getDarkModeReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "ON/OFF"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event:  "nbe-getDarkModeReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 291,
+       description: "Ha habido un error durante el proceso."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 291: ''' Ha habido un error durante el proceso.
+
+&nbsp;
+
+=== Códigos de Error ===
+
+Todos los códigos de error estará a partir del número '''200''':
+
+'''Android'''
+
+ '''. 201:''' El dispositivo no tiene el hardware para realizar la vibración.
+
+ '''. 202:''' Pasa por el catch y salta la excepción al intentar hacer vibrar el dispositivo.
+
+ '''. 203:''' Ha habido un error al comprobar si el dispositivo tiene estado NO MOLESTAR.
+
+ '''. 204:''' Ha habido un error al obtener el estado de la conexión del dispositivo.
+
+ '''. 205:''' Ha habido un error al obtener el estado del plano de la app.
+
+ '''. 211:''' Ha habido un error al copiar el texto en el portapapeles.
+
+ '''. 212:''' Ha habido un error al compartir un texto a una app externa
+
+ '''. 221:''' Ha habido un error al obtener el Sistema Operativo.
+
+ '''. 231:''' Ha habido un error al generar el KeyPair.
+
+ '''. 241:''' No se ha generado la clave privada para poder cifrar el texto.
+
+ '''. 242:''' Ha habido un error al cifrar el texto.
+
+ '''. 243:''' No se ha generado la clave privada para poder firmar el texto.
+
+ '''. 244:''' Ha habido un error al firmar el texto.
+
+ '''. 251:''' Ha habido un error al obtener el UUID del dispositivo.
+
+ '''. 261:''' Ha habido un error en la descarga del pdf.
+
+ '''. 262:''' El usuario no ha aceptado los permisos.
+
+ '''. 263:''' El usuario no ha aceptado los permisos.
+
+ '''. 264:''' El usuario canceló el proceso.
+
+ '''. 265:''' El contacto seleccionado no tiene número de teléfono.
+
+ '''. 271:''' Ha habido un error al obtener el modelo del dispositivo
+
+ '''. 281:''' Ha habido un error al comprobar si el dispositivo tiene notch
+
+ '''. 291:''' Ha habido un error durante el proceso.
+
+ '''. 292:''' La función a la que ha llamado no existe.
+
+ '''. 491:''' Ha habido un error al intentar comprobar si está rooteado el dispositivo.
+
+'''iOS'''
+
+ '''. 231:''' Ha habido un error al generar el KeyPair.
+
+ '''. 232:''' La versión del dispositivo es inferior a la versión 10.0 y no puede ejecutar la función.
+
+ '''. 233:''' Ha habido un problema al guardar el uuid en el dispositivo.
+
+ '''. 234:''' No hay generado ninguna clave para encriptar el texto.
+
+ '''. 235:''' Ha habido un error al encriptar el texto.
+
+ '''. 236:''' Ha habido un error al firmar el texto.
+
+ '''. 237:''' La versión del dispositivo es inferior a la versión 10.0 y no puede ejecutar la función.
+
+ '''. 238:''' No hay ninguna clave privada para firmar el texto.
+
+ '''. 239:''' Ha habido un problema al obtener el modelo del dispositivo.
+
+ '''. 240:''' Ha habido un error al comprobar si el dispositivo tiene notch.
+
+ '''. 241:''' Ha habido un error descargar el pdf.
+
+ '''. 242:''' Ha habido un error mostrar el pdf
+
+ '''. 243:''' Ha habido un error al obtener la versión de la app.
+
+ '''. 244:''' Ha habido un error al compartir datos con una app externa
+
+== Funciones Tipo Biometrics ==
+
+Necesario para realizar toda la parte de comunicación con el hardware del dispositivo y con el sistema para poder reconocer el acceso biométrico. Todos los códigos de error estará a partir del número 300. Los eventos disponibles son los siguientes:
+
+=== CHECKBIOMETRICAVAILABILITY ===
+
+Evento que sirve para saber si el dispositivo permite el reconocimiento biométrico.
+
+==== Datos de Entrada ====
+
+No son necesarios ningún dato de entrada.
+
+Objeto a mandar en el postMessage:
+
+  {
+    event: "nbe-checkBiometricAvailability"
+  }
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-checkBiometricAvailabilityReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-checkBiometricAvailabilityReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: true/false
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-checkBiometricAvailabilityReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 301,
+       description: "La versión del dispositivo es inferior a la versión que permite el reconocimiento biométrico."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 301: ''' La versión del dispositivo es inferior a la versión que permite el reconocimiento biométrico.
+
+ '''. 302: ''' El dispositivo no tiene el hardware necesario para el reconocimiento biométrico.
+
+ '''. 303: ''' El usuario no tiene ninguna huella enrolada en el dispositivo.
+
+ '''. 304: ''' Ha habido un error en el proceso de comprobar la disponibilidad.
+
+'''iOS'''
+
+ '''. 305: ''' Error al obtener el tipo de identificación biométrica.
+
+ '''. 306: ''' El reconocimiento biométrico no está disponible
+
+=== INITBIOMETRICIDENTIFICATION ===
+
+Evento que sirve para abrir el modal y comenzar el reconocimiento biométrico.
+
+==== Datos de Entrada ====
+
+Los datos necesarios para que la llamada sea correcta son:
+
+'''· title''': título del texto biométrico.
+
+'''· desc''': descripción del texto biométrico.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-initBiometricIdentification",
+   extra: {
+     title: "Acceso con huella",
+     desc: "Mantenga presionado el sensor de huella"
+   }
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-initBiometricIdentificationReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-initBiometricIdentificationReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "error/success/help/failed/cancel"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-initBiometricIdentificationReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 303,
+       description: "El usuario no tiene ninguna huella enrolada en el dispositivo."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 301: ''' La versión del dispositivo es inferior a la versión que permite el reconocimiento biométrico.
+
+ '''. 302: ''' El dispositivo no tiene el hardware necesario para el reconocimiento biométrico.
+
+ '''. 303: ''' El usuario no tiene ninguna huella enrolada en el dispositivo.
+
+ '''. 304: ''' Ha habido un error en el proceso de comprobar la disponibilidad.
+
+ '''. 310: ''' No se ha podido usar el reconocimiento biométrico en este dispositivo.
+
+ '''. 391: ''' Ha habido un error durante el proceso.
+
+ '''. 392: ''' La función a la que ha llamado no existe.
+
+ '''. 393: ''' Ha habido un error al generar el cipher.
+
+ '''. 394: ''' Ha habido un error al obtener el key.
+
+ '''. 395: ''' Ha habido un error al generar el key.
+
+=== STOPBIOMETRICIDENTIFICATION (Solo para Android) ===
+
+Evento que sirve para cerrar el modal y terminar el reconocimiento biométrico.
+
+==== Datos de Entrada ====
+
+No son necesarios ningún dato de entrada.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-stopBiometricIdentification"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-stopBiometricIdentificationReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-stopBiometricIdentificationReturn",
+   extra: {
+     codigoRetorno: 1
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-stopBiometricIdentificationReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 315,
+       description: "Ha habido un problema al intentar cancelar la identificación biométrica."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 315: ''' Ha habido un problema al intentar cancelar la identificación biométrica.
+
+=== UPDATEBIOMETRICFLAG ===
+
+Evento que sirve para guardar en la base de datos del dispositivo el dato de si ya ha iniciado con huella o no.
+
+==== Datos de Entrada ====
+
+'''· biometricValue''': el texto que queremos guardar en la base de datos. EJ/ "true/false"
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-updateBiometricFlag",
+   extra: {
+     biometricValue: "true/false"
+   }
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-updateBiometricFlagReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-updateBiometricFlagReturn",
+   extra: {
+     codigoRetorno: 1
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-updateBiometricFlagReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 320,
+       description: "Ha habido un error al actualizar la BBDD de android."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 320: ''' Ha habido un error al actualizar la BBDD de android.
+
+=== GETBIOMETRICFLAG ===
+
+Evento que sirve para obtener de la base de datos del dispositivo el dato de si ya ha iniciado con huella o no.
+
+==== Datos de Entrada ====
+
+'''· biometricValue''': el texto que queremos guardar en la base de datos. EJ/ "true/false"
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getBiometricFlag"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-getBiometricFlagReturn''' y puede ser OK o KO
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getBiometricFlagReturn",
+   extra: {
+     codigoRetorno: 1,
+     data: {
+       response: "texto guardado"
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getBiometricFlagReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 322,
+       description: "Ha habido un error al obtener los datos de la BBDD de android."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 322: ''' Ha habido un error al obtener los datos de la BBDD de android.
+
+=== Códigos de Error ===
+
+Todos los códigos de error estará a partir del número '''300''':
+
+'''Android'''
+
+ '''. 301:''' La versión del dispositivo es inferior a la versión que permite el reconocimiento biométrico.
+
+ '''. 302:''' El dispositivo no tiene el hardware necesario para el reconocimiento biométrico.
+
+ '''. 303:''' El usuario no tiene ninguna huella enrolada en el dispositivo.
+
+ '''. 304:''' Ha habido un error en el proceso de comprobar la disponibilidad.
+
+ '''. 310:''' No se ha podido usar el reconocimiento biométrico en este dispositivo.
+
+ '''. 311:''' Ha habido un problema y no se puede continuar con el reconocimiento biométrico.
+
+ '''. 312:''' Ha habido un problema y no se puede continuar con el reconocimiento biométrico.
+
+ '''. 313:''' La huella no se ha reconocido en el dispositivo.
+
+ '''. 314:''' El usuario ha cancelado el reconocimiento biométrico.
+
+ '''. 315:''' Ha habido un problema al intentar cancelar la identificación biométrica.
+
+ '''. 320:''' Ha habido un error al actualizar la BBDD de android.
+
+ '''. 321:''' Ha habido un error al hacer un insert en la BBDD de android.
+
+ '''. 322:''' Ha habido un error al obtener los datos de la BBDD de android.
+
+ '''. 391:''' Ha habido un error durante el proceso.
+
+ '''. 392:''' La función a la que ha llamado no existe.
+
+ '''. 393:''' Ha habido un error al generar el cipher.
+
+ '''. 394:''' Ha habido un error al obtener el key.
+
+ '''. 395:''' Ha habido un error al generar el key
+
+'''iOS'''
+
+ '''. 305:''' Error al obtener el tipo de identificación biométrica.
+
+ '''. 306:''' El reconocimiento biométrico no está disponible.
+
+ '''. 316:''' Ha habido un error al iniciar el reconocimiento biométrico.
+
+ '''. 320:''' Ha habido un error al actualizar la BBDD.
+
+ '''. 321:''' Ha habido un error al hacer un insert en la BBDD.
+
+ '''. 322:''' Ha habido un error al obtener los datos de la BBDD.
+
+ '''. 323:''' Ha habido un error al iniciar la BBDD.
+
+ '''. 324:''' Ha habido un error al crear la tabla en BBDD.
+
+&nbsp;
+
+== Funciones Tipo Push ==
+
+Necesario para activar y poder recibir las notificaciones push en el dispositivo. Todos los códigos de error estará a partir del número 500. Los eventos disponibles son los siguientes:
+
+=== UPDATEPUSHFLAG ===
+
+Evento para actualizar el flag de notificaciones.
+
+==== Datos de Entrada ====
+
+'''· flag''': nuevo valor , puede ser ' true/ false'
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getPushFlag",
+   extra: {
+     flag: "true/false"
+   }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-getPushFlagReturn''' y puede ser OK o KO:
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getPushFlagReturn",
+   extra: {
+     codigoRetorno: 1
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getPushFlagReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 501,
+       description: "Ha habido un error al settear el flag de push."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 501: ''' Ha habido un error al settear el flag de push.
+
+=== GETPUSHFLAG ===
+
+Evento que sirve para obtener el flag de notificaciones.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getPushFlag"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-getPushFlagReturn''' y puede ser OK o KO:
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getPushFlagReturn",
+   extra: {
+     codigoRetorno: 1
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getPushFlagReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 511,
+       description: "Ha habido un error al comprobar el flag de push."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 511: ''' Ha habido un error al comprobar el flag de push.
+
+=== REMOVEPUSHFLAG ===
+
+Evento que sirve para modificar el flag de notificaciones a false.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-removePushFlag"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-removePushFlagReturn''' y puede ser OK o KO:
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-removePushFlagReturn",
+   extra: {
+     codigoRetorno: 1
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-removePushFlagReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 501,
+       description: "Ha habido un error al settear el flag de push."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 501: ''' Ha habido un error al settear el flag de push.
+
+=== GETIDPUSH ===
+
+Evento que sirve para obtener el id del dispositivo para las notificaciones push.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getIdPush"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-getIdPushReturn''' y puede ser OK o KO:
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getIdPushReturn",
+   extra: {
+     codigoRetorno: 1
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-getIdPushReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 521,
+       description: "Ha habido un error al obtener el token de push guardado."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 521: ''' Ha habido un error al obtener el token de push guardado.
+
+'''iOS'''
+
+ '''. 521: ''' Ha habido un error al obtener el token de push guardado
+
+=== GENERATEIDPUSH ===
+
+Evento que sirve para generar el id del dispositivo para las notificaciones push y lo guarda para futuras ocasiones.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-generateIdPush"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-generateIdPushReturn''' y puede ser OK o KO:
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-generateIdPushReturn",
+   extra: {
+     codigoRetorno: 1
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-generateIdPushReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 531,
+       description: "Ha habido un error al generar el ID de instancia para las notificaciones push."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 531: ''' Ha habido un error al generar el ID de instancia para las notificaciones push.
+
+ '''. 591: ''' Ha habido un error durante el proceso.
+
+=== INITPUSHLISTENER ===
+
+Evento que sirve para inicializar el listener para que lleguen las notificaciones push.
+
+==== Datos de Entrada ====
+
+No es necesario mandar ningún dato extra en la llamada.
+
+Objeto a mandar en el postMessage:
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-initPushListener"
+ }
+</syntaxhighlight>
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''nbe-initPushListenerReturn''' y puede ser OK o KO:
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-initPushListenerReturn",
+   extra: {
+     codigoRetorno: 1
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "nbe-initPushListenerReturn",
+   extra: {
+     codigoRetorno: 0,
+     data: {
+       code: 591,
+       description: "Ha habido un error durante el proceso."
+     }
+   }
+ }
+</syntaxhighlight>
+
+==== Códigos de Error ====
+
+Para esta función:
+
+'''Android'''
+
+ '''. 591: ''' Ha habido un error durante el proceso.
+
+&nbsp;
+
+=== ONPUSHRECEIVED ===
+
+Evento nativo para notificar al webview la recepción de un mensaje push durante la ejecución de la aplicación en primer plano.
+
+==== Datos de Entrada ====
+
+No hay datos de entrada. Se ejecuta desde la parte nativa al recibir notificaciones.
+
+==== Respuesta ====
+
+Los datos de respuesta serán mandados en el evento '''native-onPushReceived''' y puede ser únicamente OK:
+
+'''Respuesta OK:'''
+<syntaxhighlight lang="JavaScript">{
+   event: "native-onPushReceived",
+   extra:{
+     codigoRetorno:1,
+     data:{
+       response:{
+         id: "177900345897",
+         title: "Title",
+         msg: "Text"
+       }
+     }
+   }
+ }
+</syntaxhighlight>
+
+'''Respuesta KO:'''
+
+No hay respuesta KO
+
+==== Códigos de Error ====
+
+No hay códigos de Error para esta función
+
+=== Códigos de Error ===
+
+Todos los códigos de error estará a partir del número '''500''':
+
+'''Android'''
+
+ '''. 501:''' Ha habido un error al settear el flag de push.
+
+ '''. 511:''' Ha habido un error al comprobar el flag de push.
+
+ '''. 521:''' Ha habido un error al obtener el token de push guardado.
+
+ '''. 531:''' Ha habido un error al generar el ID de instancia para las notificaciones push.
+
+ '''. 591:''' Ha habido un error durante el proceso.
+
+ '''. 592:''' Ha habido un error durante el proceso.
+
+'''iOS'''
+
+ '''. 521:''' Ha habido un error al obtener el token de push guardado
+
+'''Tags: #Banca electrónica'''
+
+[[Category:Desarrollos Grupo CCRR]] [[Category:Guía Rápida]] [[Category:Banca a Distancia]]

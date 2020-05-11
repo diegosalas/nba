@@ -1,0 +1,521 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5903D80C241294BC0042C11A /* DataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5903D80B241294BC0042C11A /* DataResponse.swift */; };
+		5903D80E241294CE0042C11A /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5903D80D241294CE0042C11A /* Event.swift */; };
+		5903D810241294DD0042C11A /* Extra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5903D80F241294DD0042C11A /* Extra.swift */; };
+		5903D8122412950B0042C11A /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5903D8112412950B0042C11A /* Errors.swift */; };
+		593F26352418D07700BF4F51 /* AppOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593F26342418D07700BF4F51 /* AppOpener.swift */; };
+		593F26372418DAF300BF4F51 /* SendPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593F26362418DAF300BF4F51 /* SendPlugin.swift */; };
+		593F26392419017800BF4F51 /* Biometrics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593F26382419017800BF4F51 /* Biometrics.swift */; };
+		593F263B24193A5800BF4F51 /* Push.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593F263A24193A5800BF4F51 /* Push.swift */; };
+		593F263D241A1F5300BF4F51 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 593F263C241A1F5300BF4F51 /* GoogleService-Info.plist */; };
+		593F263F241A5E4F00BF4F51 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 593F263E241A5E4F00BF4F51 /* Reachability.swift */; };
+		596B9FF82423960C008DBF98 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 596B9FF72423960C008DBF98 /* LocalAuthentication.framework */; };
+		59804B9C246445BF00891FE6 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59804B9B246445BF00891FE6 /* CoreTelephony.framework */; };
+		5999BCB2244ED15E00C34B7E /* PassKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5999BCB1244ED15E00C34B7E /* PassKit.framework */; };
+		59C12E9124168FA700DFFB41 /* JsonSerializerSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C12E9024168FA700DFFB41 /* JsonSerializerSwift.swift */; };
+		7F46B71C23FE670B0052F46E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F46B71B23FE670B0052F46E /* AppDelegate.swift */; };
+		7F46B71E23FE670B0052F46E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F46B71D23FE670B0052F46E /* SceneDelegate.swift */; };
+		7F46B72023FE670B0052F46E /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F46B71F23FE670B0052F46E /* WebViewController.swift */; };
+		7F46B72323FE670B0052F46E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F46B72123FE670B0052F46E /* Main.storyboard */; };
+		7F46B72523FE670B0052F46E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7F46B72423FE670B0052F46E /* Assets.xcassets */; };
+		7F46B72823FE670B0052F46E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7F46B72623FE670B0052F46E /* LaunchScreen.storyboard */; };
+		7F46B73B240F92490052F46E /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F46B73A240F92490052F46E /* Utils.swift */; };
+		7F46B741240FA7280052F46E /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F46B740240FA7280052F46E /* SystemConfiguration.framework */; };
+		7F46B743240FA75D0052F46E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F46B742240FA75D0052F46E /* Security.framework */; };
+		7F46B745240FA7630052F46E /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F46B744240FA7630052F46E /* StoreKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1A26FC6CE625215A587EF7E6 /* Pods-NuevaBanca-ios.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NuevaBanca-ios.debug.xcconfig"; path = "Target Support Files/Pods-NuevaBanca-ios/Pods-NuevaBanca-ios.debug.xcconfig"; sourceTree = "<group>"; };
+		2D967C2B6AB0C8421F1BDF33 /* Pods-NuevaBanca-ios.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NuevaBanca-ios.release.xcconfig"; path = "Target Support Files/Pods-NuevaBanca-ios/Pods-NuevaBanca-ios.release.xcconfig"; sourceTree = "<group>"; };
+		5903D80B241294BC0042C11A /* DataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataResponse.swift; sourceTree = "<group>"; };
+		5903D80D241294CE0042C11A /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		5903D80F241294DD0042C11A /* Extra.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extra.swift; sourceTree = "<group>"; };
+		5903D8112412950B0042C11A /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		593F26342418D07700BF4F51 /* AppOpener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppOpener.swift; sourceTree = "<group>"; };
+		593F26362418DAF300BF4F51 /* SendPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendPlugin.swift; sourceTree = "<group>"; };
+		593F26382419017800BF4F51 /* Biometrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Biometrics.swift; sourceTree = "<group>"; };
+		593F263A24193A5800BF4F51 /* Push.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Push.swift; sourceTree = "<group>"; };
+		593F263C241A1F5300BF4F51 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		593F263E241A5E4F00BF4F51 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		596B9FF72423960C008DBF98 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
+		59804B9B246445BF00891FE6 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		5999BCB1244ED15E00C34B7E /* PassKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PassKit.framework; path = System/Library/Frameworks/PassKit.framework; sourceTree = SDKROOT; };
+		59C12E9024168FA700DFFB41 /* JsonSerializerSwift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonSerializerSwift.swift; sourceTree = "<group>"; };
+		7F46B71823FE670B0052F46E /* NuevaBanca-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "NuevaBanca-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7F46B71B23FE670B0052F46E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7F46B71D23FE670B0052F46E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		7F46B71F23FE670B0052F46E /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		7F46B72223FE670B0052F46E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		7F46B72423FE670B0052F46E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		7F46B72723FE670B0052F46E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		7F46B72923FE670B0052F46E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7F46B73A240F92490052F46E /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		7F46B73E240FA70A0052F46E /* NuevaBanca-ios.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "NuevaBanca-ios.entitlements"; sourceTree = "<group>"; };
+		7F46B740240FA7280052F46E /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		7F46B742240FA75D0052F46E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		7F46B744240FA7630052F46E /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		8C601B1A9A83D963F8AB8975 /* libPods-NuevaBanca-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NuevaBanca-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7F46B71523FE670B0052F46E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F46B745240FA7630052F46E /* StoreKit.framework in Frameworks */,
+				5999BCB2244ED15E00C34B7E /* PassKit.framework in Frameworks */,
+				7F46B743240FA75D0052F46E /* Security.framework in Frameworks */,
+				7F46B741240FA7280052F46E /* SystemConfiguration.framework in Frameworks */,
+				59804B9C246445BF00891FE6 /* CoreTelephony.framework in Frameworks */,
+				596B9FF82423960C008DBF98 /* LocalAuthentication.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		20B3217EAAB89E5212C6E27B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1A26FC6CE625215A587EF7E6 /* Pods-NuevaBanca-ios.debug.xcconfig */,
+				2D967C2B6AB0C8421F1BDF33 /* Pods-NuevaBanca-ios.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		5903D807241292520042C11A /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				59C12E8F241630CA00DFFB41 /* WebView */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		5903D8082412925E0042C11A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5903D80B241294BC0042C11A /* DataResponse.swift */,
+				5903D80D241294CE0042C11A /* Event.swift */,
+				5903D80F241294DD0042C11A /* Extra.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		5903D8092412926B0042C11A /* Plugins */ = {
+			isa = PBXGroup;
+			children = (
+				7F46B73A240F92490052F46E /* Utils.swift */,
+				5903D8112412950B0042C11A /* Errors.swift */,
+				593F26342418D07700BF4F51 /* AppOpener.swift */,
+				593F26362418DAF300BF4F51 /* SendPlugin.swift */,
+				593F26382419017800BF4F51 /* Biometrics.swift */,
+				593F263A24193A5800BF4F51 /* Push.swift */,
+			);
+			path = Plugins;
+			sourceTree = "<group>";
+		};
+		5903D80A241292BF0042C11A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				7F46B72123FE670B0052F46E /* Main.storyboard */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		59C12E8F241630CA00DFFB41 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				7F46B71F23FE670B0052F46E /* WebViewController.swift */,
+			);
+			path = WebView;
+			sourceTree = "<group>";
+		};
+		59C12E9224168FFE00DFFB41 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				593F263E241A5E4F00BF4F51 /* Reachability.swift */,
+				59C12E9024168FA700DFFB41 /* JsonSerializerSwift.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		7F46B70F23FE670B0052F46E = {
+			isa = PBXGroup;
+			children = (
+				7F46B71A23FE670B0052F46E /* NuevaBanca-ios */,
+				7F46B71923FE670B0052F46E /* Products */,
+				7F46B73F240FA7280052F46E /* Frameworks */,
+				20B3217EAAB89E5212C6E27B /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		7F46B71923FE670B0052F46E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7F46B71823FE670B0052F46E /* NuevaBanca-ios.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7F46B71A23FE670B0052F46E /* NuevaBanca-ios */ = {
+			isa = PBXGroup;
+			children = (
+				59C12E9224168FFE00DFFB41 /* Utils */,
+				5903D80A241292BF0042C11A /* Views */,
+				5903D8092412926B0042C11A /* Plugins */,
+				5903D8082412925E0042C11A /* Models */,
+				5903D807241292520042C11A /* Controllers */,
+				7F46B73E240FA70A0052F46E /* NuevaBanca-ios.entitlements */,
+				7F46B71B23FE670B0052F46E /* AppDelegate.swift */,
+				7F46B71D23FE670B0052F46E /* SceneDelegate.swift */,
+				593F263C241A1F5300BF4F51 /* GoogleService-Info.plist */,
+				7F46B72423FE670B0052F46E /* Assets.xcassets */,
+				7F46B72623FE670B0052F46E /* LaunchScreen.storyboard */,
+				7F46B72923FE670B0052F46E /* Info.plist */,
+			);
+			path = "NuevaBanca-ios";
+			sourceTree = "<group>";
+		};
+		7F46B73F240FA7280052F46E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				59804B9B246445BF00891FE6 /* CoreTelephony.framework */,
+				5999BCB1244ED15E00C34B7E /* PassKit.framework */,
+				596B9FF72423960C008DBF98 /* LocalAuthentication.framework */,
+				7F46B744240FA7630052F46E /* StoreKit.framework */,
+				7F46B742240FA75D0052F46E /* Security.framework */,
+				7F46B740240FA7280052F46E /* SystemConfiguration.framework */,
+				8C601B1A9A83D963F8AB8975 /* libPods-NuevaBanca-ios.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		7F46B71723FE670B0052F46E /* NuevaBanca-ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7F46B72C23FE670B0052F46E /* Build configuration list for PBXNativeTarget "NuevaBanca-ios" */;
+			buildPhases = (
+				C3A660AD3F29AF9C70BDE3C0 /* [CP] Check Pods Manifest.lock */,
+				7F46B71423FE670B0052F46E /* Sources */,
+				7F46B71523FE670B0052F46E /* Frameworks */,
+				7F46B71623FE670B0052F46E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "NuevaBanca-ios";
+			productName = "NuevaBanca-ios";
+			productReference = 7F46B71823FE670B0052F46E /* NuevaBanca-ios.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7F46B71023FE670B0052F46E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1120;
+				LastUpgradeCheck = 1120;
+				ORGANIZATIONNAME = "Daniel Parra Crespo";
+				TargetAttributes = {
+					7F46B71723FE670B0052F46E = {
+						CreatedOnToolsVersion = 11.2.1;
+					};
+				};
+			};
+			buildConfigurationList = 7F46B71323FE670B0052F46E /* Build configuration list for PBXProject "NuevaBanca-ios" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 7F46B70F23FE670B0052F46E;
+			productRefGroup = 7F46B71923FE670B0052F46E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				7F46B71723FE670B0052F46E /* NuevaBanca-ios */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7F46B71623FE670B0052F46E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7F46B72823FE670B0052F46E /* LaunchScreen.storyboard in Resources */,
+				593F263D241A1F5300BF4F51 /* GoogleService-Info.plist in Resources */,
+				7F46B72523FE670B0052F46E /* Assets.xcassets in Resources */,
+				7F46B72323FE670B0052F46E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C3A660AD3F29AF9C70BDE3C0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NuevaBanca-ios-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7F46B71423FE670B0052F46E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				593F26372418DAF300BF4F51 /* SendPlugin.swift in Sources */,
+				7F46B72023FE670B0052F46E /* WebViewController.swift in Sources */,
+				593F26352418D07700BF4F51 /* AppOpener.swift in Sources */,
+				5903D80C241294BC0042C11A /* DataResponse.swift in Sources */,
+				7F46B71C23FE670B0052F46E /* AppDelegate.swift in Sources */,
+				59C12E9124168FA700DFFB41 /* JsonSerializerSwift.swift in Sources */,
+				7F46B71E23FE670B0052F46E /* SceneDelegate.swift in Sources */,
+				593F263F241A5E4F00BF4F51 /* Reachability.swift in Sources */,
+				5903D8122412950B0042C11A /* Errors.swift in Sources */,
+				5903D80E241294CE0042C11A /* Event.swift in Sources */,
+				593F26392419017800BF4F51 /* Biometrics.swift in Sources */,
+				593F263B24193A5800BF4F51 /* Push.swift in Sources */,
+				5903D810241294DD0042C11A /* Extra.swift in Sources */,
+				7F46B73B240F92490052F46E /* Utils.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		7F46B72123FE670B0052F46E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7F46B72223FE670B0052F46E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		7F46B72623FE670B0052F46E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				7F46B72723FE670B0052F46E /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		7F46B72A23FE670B0052F46E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		7F46B72B23FE670B0052F46E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7F46B72D23FE670B0052F46E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1A26FC6CE625215A587EF7E6 /* Pods-NuevaBanca-ios.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "NuevaBanca-ios/NuevaBanca-ios.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 23NM9T65YF;
+				INFOPLIST_FILE = "NuevaBanca-ios/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.rsi.nba;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7F46B72E23FE670B0052F46E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2D967C2B6AB0C8421F1BDF33 /* Pods-NuevaBanca-ios.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "NuevaBanca-ios/NuevaBanca-ios.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 23NM9T65YF;
+				INFOPLIST_FILE = "NuevaBanca-ios/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.rsi.nba;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		7F46B71323FE670B0052F46E /* Build configuration list for PBXProject "NuevaBanca-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F46B72A23FE670B0052F46E /* Debug */,
+				7F46B72B23FE670B0052F46E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7F46B72C23FE670B0052F46E /* Build configuration list for PBXNativeTarget "NuevaBanca-ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7F46B72D23FE670B0052F46E /* Debug */,
+				7F46B72E23FE670B0052F46E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7F46B71023FE670B0052F46E /* Project object */;
+}
